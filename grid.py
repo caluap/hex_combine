@@ -10,11 +10,19 @@ class Tile:
         self.filename = randomFilename()
         self.pos_x, self.pos_y = pos(x,y)
         
-    def print(self, print_tile_border = False):
+    def print_self(self, print_tile_border = False):
         rf = './combined/' + self.filename + '.pdf'
         image(rf, (self.pos_x, self.pos_y))
         if print_tile_border:
             image('tile.pdf', (self.pos_x, self.pos_y))
+    
+    def find_neighbours(self):
+        neighbours = [False, False, False, False, False, False]
+        l = ['a','b','c','d','e','f']
+        for i in range(6):
+            if self.filename[i] == l[i]:
+                neighbours[i] = True
+        return neighbours
 
 
 
@@ -49,7 +57,7 @@ def main():
         tiles.append([])
         for ix in range(w):
             tiles[iy].append(Tile(ix,iy))
-            tiles[iy][ix].print(True)
+            tiles[iy][ix].print_self(True)
             
         
     
