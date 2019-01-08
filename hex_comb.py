@@ -1,4 +1,6 @@
-def gera(ar):
+suffixes = ['0', '1']
+
+def gera(ar, suffix = '0'):
     
     newDrawing()
     size(97,112)
@@ -14,20 +16,21 @@ def gera(ar):
     for i in range(len(ar)):
         if ar[i]:
             s[i] = l[i]
-            tick_fn = 'parts/' + l[i] + '.pdf'
+            tick_fn = 'parts/' + suffix + l[i] + '.pdf'
             image(tick_fn, (0,0))
-    filename = 'combined/' + ''.join(s) + '.pdf'
+    filename = 'combined/' + suffix + ''.join(s) + '.pdf'
     saveImage(filename)
 
 
 def main():
-    for a in True, False:
-        for b in True, False:
-            for c in True, False:
-                for d in True, False:
-                    for e in True, False:
-                        for f in True, False:
-                            gera([a,b,c,d,e,f])
+    for suffix in suffixes:
+        for a in True, False:
+            for b in True, False:
+                for c in True, False:
+                    for d in True, False:
+                        for e in True, False:
+                            for f in True, False:
+                                gera([a,b,c,d,e,f], suffix)
 
 
 main()                        

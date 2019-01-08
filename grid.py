@@ -14,6 +14,7 @@ def pos(ix, iy):
     return x+offset, y+offset
     
 class Tile:
+    suffixes = ['0', '1']
     tile_size = 97, 112
     l = ['a','b','c','d','e','f']
     
@@ -54,7 +55,8 @@ class Tile:
         image('parts/edge.pdf', (self.pos_x, self.pos_y))
         
     def print_self(self, print_tile_edge = False, print_piece = True):
-        rf = './combined/' + self.tile_name + '.pdf'
+        suffix = random.choice(Tile.suffixes)
+        rf = './combined/' + suffix + self.tile_name + '.pdf'
         if print_piece:
             image(rf, (self.pos_x, self.pos_y))
         if print_tile_edge:
