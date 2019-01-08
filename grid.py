@@ -21,6 +21,7 @@ class Tile:
         return x, y
         
     def set_tile(self, neighbours = [-1, -1, -1, -1, -1, -1]):
+        # I can't set a tile that is already set
         if not self.is_set:
             p = []
             for i in range(len(neighbours)):
@@ -45,14 +46,14 @@ class Tile:
             # yes connection
             return 1
         
-    def print_tile(self):
+    def print_edge(self):
         image('tile.pdf', (self.pos_x, self.pos_y))
         
-    def print_self(self, print_tile_border = False):
+    def print_self(self, print_tile_edge = False):
         rf = './combined/' + self.tile_name + '.pdf'
         image(rf, (self.pos_x, self.pos_y))
-        if print_tile_border:
-            self.print_tile()
+        if print_tile_edge:
+            self.print_edge()
 
 def main():
     size('A2')
@@ -73,16 +74,25 @@ def main():
 
     random.shuffle(indices)
     
-
-    for i in range(len(indices)//5):
+    # creates all tiles
+    for i in range(len(indices)//2):
         ix, iy = indices[i]
 
-        # d, c, e, b, f, a
-        # 3, 2, 4, 1, 5, 0
+        # it'll check the current tile's neighbours by row, bottom to top,
+        # and by column, left to right, in an order different than the
+        # clockwise one I established, so I need to convert it.
         order = [3, 2, 4, 1, 5, 0]
+        # Also: I need to convert the current tile's edge I'm checking with
+        # its neighbour corresponding edge
         intersection = ['a', 'f', 'b', 'e', 'c', 'd']
+        
+        # -1 --> There is no neighbour yet here
+        #  0 --> There is a neighbour, but it's not sending a connection
+        # +1 --> There is a neighbour and he's sending a connection
         neighbours = [0, 0, 0, 0, 0, 0]
         
+        # accounts for the fact that odd rows are further
+        # to the right than even rows
         if iy % 2 == 0:
             d_x = 0
         else: 
@@ -91,6 +101,9 @@ def main():
         i_n = 0
         
         for aux_y in range(iy-1, iy+2):
+            
+            # there are 3 rows and 2 columns to check, but the offset differs in the
+            # middle row, where I'm not checking adjacent tiles
             if aux_y == iy:
                 min_x = ix - 1
                 max_x = ix + 1
@@ -100,12 +113,14 @@ def main():
                 
             for aux_x in [min_x, max_x]:
                 if aux_x >= 0 and aux_x < w and aux_y >= 0 and aux_y < h:
+                    # does this tile exist?
                     if tiles[aux_y][aux_x].is_set:
                         neighbours[order[i_n]] = tiles[aux_y][aux_x].has_conn(intersection[i_n])
                     else:
                         neighbours[order[i_n]] = -1
                 else:
-                    # border of the screen, so we can be random
+                    # this edge is off the screen, so we can chose randomly whether 
+                    # or not to create a connection
                     neighbours[order[i_n]] = -1
                 i_n += 1
         
