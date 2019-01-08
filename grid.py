@@ -51,7 +51,7 @@ class Tile:
             return 1
         
     def print_edge(self):
-        image('tile.pdf', (self.pos_x, self.pos_y))
+        image('parts/edge.pdf', (self.pos_x, self.pos_y))
         
     def print_self(self, print_tile_edge = False, print_piece = True):
         rf = './combined/' + self.tile_name + '.pdf'
@@ -66,7 +66,8 @@ def main():
     w = round(width()/Tile.tile_size[0]) + 1
     h = round(height()/(Tile.tile_size[1]*0.75)) + 1
 
-    print(f'{w,h}')
+    if debug:
+        print(f'{w,h}')
     
     tiles = []
     

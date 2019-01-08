@@ -8,13 +8,13 @@ def gera(ar):
     l = ['a','b','c','d','e','f']
     
     # loads base hexagon
-    image("hexagon.pdf", (0,0))
+    image("parts/hexagon.pdf", (0,0))
     
     # places ticks
     for i in range(len(ar)):
         if ar[i]:
             s[i] = l[i]
-            tick_fn = l[i] + '.pdf'
+            tick_fn = 'parts/' + l[i] + '.pdf'
             image(tick_fn, (0,0))
     filename = 'combined/' + ''.join(s) + '.pdf'
     saveImage(filename)
