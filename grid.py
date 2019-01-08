@@ -1,6 +1,15 @@
 import random
 from pprint import pprint
 
+def pos(ix, iy):
+    adj_x = int((iy % 2) * Tile.tile_size[0]/2)
+    adj_y = int(Tile.tile_size[1] * 0.75)
+
+    # I subtract half a tile_size so they go till they bleed the page
+    x = ix*Tile.tile_size[0]+adj_x - Tile.tile_size[0]//2
+    y = iy*adj_y - Tile.tile_size[1]//2
+    return x, y
+    
 class Tile:
     tile_size = 97, 112
     l = ['a','b','c','d','e','f']
@@ -8,17 +17,9 @@ class Tile:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.pos_x, self.pos_y = self.pos(x,y)
+        self.pos_x, self.pos_y = pos(x,y)
         self.is_set = False
-                
-    def pos(self, ix, iy):
-        adj_x = int((iy % 2) * Tile.tile_size[0]/2)
-        adj_y = int(Tile.tile_size[1] * 0.75)
-    
-        # I subtract half a tile_size so they go till they bleed the page
-        x = ix*Tile.tile_size[0]+adj_x - Tile.tile_size[0]//2
-        y = iy*adj_y - Tile.tile_size[1]//2
-        return x, y
+
         
     def set_tile(self, neighbours = [-1, -1, -1, -1, -1, -1]):
         # I can't set a tile that is already set
@@ -49,9 +50,10 @@ class Tile:
     def print_edge(self):
         image('tile.pdf', (self.pos_x, self.pos_y))
         
-    def print_self(self, print_tile_edge = False):
+    def print_self(self, print_tile_edge = False, print_piece = True):
         rf = './combined/' + self.tile_name + '.pdf'
-        image(rf, (self.pos_x, self.pos_y))
+        if print_piece:
+            image(rf, (self.pos_x, self.pos_y))
         if print_tile_edge:
             self.print_edge()
 
@@ -125,6 +127,17 @@ def main():
                 i_n += 1
         
         tiles[iy][ix].set_tile(neighbours)
-        tiles[iy][ix].print_self(False)
+        tiles[iy][ix].print_self(True)
+
+        if True:
+            txt = FormattedString(align='center')
+            s = f'{i}\n{neighbours}'
+            txt.append(s, font="Helvetica", fontSize=10, fill=(1,0,0))
+            tx, ty = pos(ix, iy)
+            # rect(tx, ty, Tile.tile_size[0], Tile.tile_size[1])
+            textBox(txt, (tx, ty+20, Tile.tile_size[0], 40))
+
+        
+
     
 main()
