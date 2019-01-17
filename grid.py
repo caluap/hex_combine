@@ -3,7 +3,7 @@ from pprint import pprint
 
 offset = 0
 debug = False
-bg = True
+bg = False
 side = 3000
 
 def pos(ix, iy):
@@ -29,13 +29,13 @@ class Tile:
     suffixes = ['0','1','2', '3','4', '5', '6', '7']
     suffixes_weights = [10, 1, 5, 7, 1, 0, 0, 0]
     suffixes_weights = [
-        6, # 0
+        8, # 0
         0, # 1
-        2, # 2
+        1, # 2
         1, # 3
         1, # 4
         0, # 5
-        7, # 6
+        8, # 6
         0  # 7
     ]
     emptiness = [5, 3]
