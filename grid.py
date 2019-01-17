@@ -3,6 +3,8 @@ from pprint import pprint
 
 offset = 0
 debug = False
+bg = True
+side = 3000
 
 def pos(ix, iy):
     adj_x = int((iy % 2) * Tile.tile_size[0]/2)
@@ -14,7 +16,29 @@ def pos(ix, iy):
     return x+offset, y+offset
     
 class Tile:
-    suffixes = ['0', '1']
+    '''
+        0 : straight lines
+        1 : electric
+        2 : curly with circle in the middle
+        3 : leafy
+        4 : flowery
+        5 : bizarro handshake
+        6 : triangles, straight
+        7 : triangles, halftone (does not compose well)
+    '''
+    suffixes = ['0','1','2', '3','4', '5', '6', '7']
+    suffixes_weights = [10, 1, 5, 7, 1, 0, 0, 0]
+    suffixes_weights = [
+        6, # 0
+        0, # 1
+        2, # 2
+        1, # 3
+        1, # 4
+        0, # 5
+        7, # 6
+        0  # 7
+    ]
+    emptiness = [5, 3]
     tile_size = 97, 112
     l = ['a','b','c','d','e','f']
     
@@ -32,7 +56,8 @@ class Tile:
             for i in range(len(neighbours)):
                 if neighbours[i] == -1:
                     # there is no neighbour, so we can decide randomly
-                    p.append(random.choice(['_', Tile.l[i]]))
+                    t = random.choices(['_', Tile.l[i]], weights=Tile.emptiness)[0]
+                    p.append(t)
                 elif neighbours[i] == 0: 
                     # neighbour sends no connection
                     p.append('_')
@@ -55,7 +80,7 @@ class Tile:
         image('parts/edge.pdf', (self.pos_x, self.pos_y))
         
     def print_self(self, print_tile_edge = False, print_piece = True):
-        suffix = random.choice(Tile.suffixes)
+        suffix = random.choices(Tile.suffixes, weights=Tile.suffixes_weights)[0]
         rf = './combined/' + suffix + self.tile_name + '.pdf'
         if print_piece:
             image(rf, (self.pos_x, self.pos_y))
@@ -63,7 +88,12 @@ class Tile:
             self.print_edge()
 
 def main():
-    size('A2')
+    # size('A0')
+    size(side, side)    
+    
+    if bg:
+        fill(0)
+        rect(0,0,width(), height())
 
     w = round(width()/Tile.tile_size[0]) + 1
     h = round(height()/(Tile.tile_size[1]*0.75)) + 1

@@ -1,4 +1,4 @@
-suffixes = ['0', '1']
+suffixes = ['0', '1', '2', '3', '4', '5', '6', '7']
 
 def gera(ar, suffix = '0'):
     
@@ -10,7 +10,7 @@ def gera(ar, suffix = '0'):
     l = ['a','b','c','d','e','f']
     
     # loads base hexagon
-    image("parts/hexagon.pdf", (0,0))
+    # image("parts/hexagon.pdf", (0,0))
     
     # places ticks
     for i in range(len(ar)):
